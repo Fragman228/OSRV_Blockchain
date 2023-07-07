@@ -1,0 +1,40 @@
+---
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install docker
+  ansible.builtin.dnf:
+    name: docker-ce
+    state: latest
+
+- name: Install docker-compose
+  ansible.builtin.dnf:
+    name: docker-compose
+    state: latest
+
+- name: Ethereum net installation
+  ansible.builtin.git:
+    repo: 'https://github.com/Capgemini-AIE/ethereum-docker.git'
+    dest: /home/vagrant
+    version: release-0.22
+
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: /home/vagrant/ethereum-docker/docker-compose.yml
+    state: absent
+  
+- name: Template a file to /home/vagrant/ethereum-docker/docker-compose.yml
+  ansible.builtin.template:
+    src: /templates/docker-compose.yml.j2
+    dest: /home/vagrant/ethereum-docker/docker-compose.yml
+    owner: bin
+    group: wheel
+    mode: '0644'
